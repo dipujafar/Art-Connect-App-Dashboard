@@ -11,14 +11,14 @@ export const metadata: Metadata = {
 
 const LoginPage = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-main-color ">
-      <div className="flex justify-center items-center   mx-auto border-2  md:px-12 px-11 py-10 rounded-[40px] bg-[#FFF9FA] ">
+    <div className="flex justify-center items-center min-h-screen bg-secondary-color ">
+      <div className="flex justify-center items-center   mx-auto   md:px-12 px-11 py-10 rounded-[40px] bg-section-bg text-text-color ">
         <div>
           <div className="mb-6   flex flex-col justify-center items-center gap-y-4">
             <div>
               <Image src={logo} alt="logImage"></Image>
             </div>
-            <h2 className="text-2xl  font-bold text-black ">Sign In</h2>
+            <h2 className="text-2xl  font-bold  ">Sign In</h2>
           </div>
           <LoginForm></LoginForm>
         </div>

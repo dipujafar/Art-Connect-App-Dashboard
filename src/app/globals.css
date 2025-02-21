@@ -13,6 +13,8 @@
   --color-section-bg: #20202b;
   --color-menu-item: #fff;
   --color-text-color: #fff;
+  --color-text-color: #fff;
+  --color-primary-green: #41ab5d;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -93,4 +95,9 @@ body {
 }
 .anticon-delete > svg {
   fill: red !important;
+}
+
+.ant-dropdown-menu-item-selected {
+  background-color: var(--color-main) !important;
+  color: #ffffff !important;
 }

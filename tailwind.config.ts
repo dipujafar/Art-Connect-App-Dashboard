@@ -16,6 +16,7 @@ const config: Config = {
         "main-color-bg": "var(--color-main-bg)",
         "section-bg": "var(--color-section-bg)",
         "text-color": "var(--color-text-color)",
+        "primary-green": "var(--color-primary-green)",
         black: "#333",
         primaryBlack: "#242321",
         primaryGray: "#7D7871",

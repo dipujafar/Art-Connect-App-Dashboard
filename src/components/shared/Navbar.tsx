@@ -31,10 +31,10 @@ const Navbar = ({ collapsed, setCollapsed }: TNavbarProps) => {
       </Flex>
 
       {/* Header right side */}
-      <Flex align="center" gap={16}>
+      <Flex align="center" gap={20}>
         {/* Notification */}
         <Link href={"/notifications"}>
-          <div className="flex justify-center items-center size-12 bg-main-color rounded-full cursor-pointer relative">
+          <div className="flex justify-center items-center size-10 bg-main-color rounded-full cursor-pointer relative">
             <IoNotificationsOutline size={24} color="#fff" />
 
             <Badge
@@ -45,29 +45,18 @@ const Navbar = ({ collapsed, setCollapsed }: TNavbarProps) => {
                 backgroundColor: "#fff",
                 color: "var(--color-main)",
                 position: "absolute",
-                top: "-16px",
+                top: "-24px",
                 right: "-8px",
               }}
-            >
-              {" "}
-            </Badge>
+            ></Badge>
           </div>
         </Link>
 
         <Link href={"/personalInformation"} className="flex items-center">
-          <Button
-            style={{
-              border: "none",
-              boxShadow: "none",
-              backgroundColor: "transparent",
-            }}
-          >
-            <Avatar src={avatarImg.src} size={48}></Avatar>
-            <div className="text-white">
-              <p className="text-lg font-semibold">James</p>
-              <p>Admin</p>
-            </div>
-          </Button>
+          <div className="flex text-black items-center gap-x-1 bg-text-color px-2 rounded-full py-[2px]">
+            <p className="text-lg ">James Tracy</p>
+            <Avatar src={avatarImg.src} size={40}></Avatar>
+          </div>
         </Link>
       </Flex>
     </div>

@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 const ResetPassword = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-main-color text-black ">
-      <div className="flex justify-center items-center w-[441px]   mx-auto border-2  md:px-12 px-11 py-10 rounded-[40px] bg-[#FFF9FA] ">
+    <div className="flex justify-center items-center min-h-screen bg-secondary-color text-text-color ">
+      <div className="flex justify-center items-center w-[441px]   mx-auto   md:px-12 px-11 py-10 rounded-[40px] bg-section-bg ">
         <div>
           <div className="mb-6  flex flex-col justify-center items-center gap-y-4">
             <div>

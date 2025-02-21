@@ -7,7 +7,7 @@ import { FiEdit } from "react-icons/fi";
 import profile from "@/assets/image/adminProfile.png";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Camera, X } from "lucide-react";
+import { Camera, Trash2, X } from "lucide-react";
 
 const PersonalInformationContainer = () => {
   const route = useRouter();
@@ -86,13 +86,13 @@ const PersonalInformationContainer = () => {
               {/* cancel button */}
               {fileName && imageUrl && (
                 <div
-                  className="absolute right-4 top-2 cursor-pointer rounded-md bg-primary-pink opacity-0 duration-1000 group-hover:opacity-100"
+                  className="absolute left-4 top-2 cursor-pointer rounded-md bg-primary-pink opacity-0 duration-1000 group-hover:opacity-100"
                   onClick={() => {
                     setFileName(null);
                     setImageUrl(null);
                   }}
                 >
-                  <X color="red" />
+                  <Trash2 size={20} color="red" />
                 </div>
               )}
               {/* upload image */}

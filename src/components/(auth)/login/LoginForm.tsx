@@ -55,24 +55,15 @@ const LoginForm = () => {
       <Form.Item<FieldType> name="remember" valuePropName="checked">
         <Flex justify="space-between" align="center">
           <Checkbox>
-            <p className="text-main-color font-semibold">Remember me</p>
+            <p className="text-text-color font-semibold">Remember me</p>
           </Checkbox>
           <Link href={"/forget-password"} style={{ textDecoration: "" }}>
-            <p className="font-semibold">Forgot Password?</p>
+            <p className="font-semibold text-text-color">Forgot Password?</p>
           </Link>
         </Flex>
       </Form.Item>
 
-      <Button
-        htmlType="submit"
-        size="large"
-        style={{
-          backgroundColor: "#8d2e7d",
-          color: "#FFFFFF",
-          width: "100%",
-          border: "none",
-        }}
-      >
+      <Button htmlType="submit" size="large" block style={{ border: "none " }}>
         Sign In
       </Button>
     </Form>

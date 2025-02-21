@@ -36,16 +36,7 @@ const VerifyEmailForm = () => {
         <Input.OTP size="large" />
       </Form.Item>
 
-      <Button
-        htmlType="submit"
-        size="large"
-        style={{
-          backgroundColor: "#8d2e7d",
-          color: "#FFFFFF",
-          width: "100%",
-          border: "none",
-        }}
-      >
+      <Button htmlType="submit" size="large" block style={{ border: "none" }}>
         Verify Email
       </Button>
     </Form>

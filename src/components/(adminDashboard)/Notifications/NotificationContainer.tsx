@@ -38,17 +38,20 @@ const NotificationContainer = () => {
   const currentNotifications = notificationData.slice(startIndex, endIndex);
   return (
     <div>
-      <div className="min-h-[80vh] bg-[#eee0ec] p-7">
+      <div className="min-h-[80vh] bg-section-bg p-7">
         <h1 className="text-2xl text-main-color font-medium">Notification</h1>
         <Divider></Divider>
-        <div className="mt-9 grid grid-cols-1 gap-8">
+        <div className="mt-5 grid grid-cols-1 gap-8">
           {currentNotifications.map((notification, inx) => (
             <div key={inx} className="flex gap-4 items-center">
               <div className="bg-[#FFFFFF] p-2 rounded">
-                <MdOutlineNotificationsNone size={28} color="#8D2E7D" />
+                <MdOutlineNotificationsNone
+                  size={28}
+                  color="var(--color-main)"
+                />
               </div>
-              <div>
-                <h4 className="text-lg font-medium">
+              <div className=" text-text-color">
+                <h4 className="text-lg font-medium ">
                   {notification.message} from {notification?.name}
                 </h4>
                 <p>{notification.time}</p>

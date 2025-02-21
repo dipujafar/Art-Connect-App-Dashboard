@@ -42,17 +42,7 @@ const ResetPasswordForm = () => {
       >
         <Input.Password size="large" placeholder="Re-enter password" />
       </Form.Item>
-
-      <Button
-        htmlType="submit"
-        size="large"
-        style={{
-          backgroundColor: "#8d2e7d",
-          color: "#FFFFFF",
-          width: "100%",
-          border: "none",
-        }}
-      >
+      <Button htmlType="submit" size="large" block style={{ border: "none" }}>
         Sign In
       </Button>
     </Form>

@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 const ForgetPasswordPage = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-main-color ">
-      <div className="flex justify-center items-center w-[441px]   mx-auto border-2  md:px-12 px-11 py-10 rounded-[40px] bg-[#FFF9FA] ">
+    <div className="flex justify-center items-center min-h-screen bg-secondary-color ">
+      <div className="flex justify-center items-center w-[441px]   mx-auto md:px-12 px-11 py-10 rounded-[40px] bg-section-bg text-text-color ">
         <div>
           <div className="mb-6  flex flex-col justify-center items-center gap-y-4">
             <div>
@@ -20,16 +20,14 @@ const ForgetPasswordPage = () => {
             </div>
             <div className="text-center space-y-4 mb-4">
               <div className="text-2xl  font-bold  text-center ">
-                <h2 className="flex justify-center items-center text-black">
+                <h2 className="flex justify-center items-center ">
                   <Link href={"/login"}>
                     <IoIosArrowRoundBack size={40} />
                   </Link>
                   Forget Password
                 </h2>
               </div>
-              <p className="text-black">
-                Please enter your email address to reset your password.
-              </p>
+              <p>Please enter your email address to reset your password.</p>
             </div>
           </div>
           <ForgetPassForm></ForgetPassForm>

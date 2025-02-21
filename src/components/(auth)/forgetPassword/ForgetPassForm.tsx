@@ -45,16 +45,7 @@ const ForgetPassForm = () => {
         <Input size="large" placeholder="Email" />
       </Form.Item>
 
-      <Button
-        htmlType="submit"
-        size="large"
-        style={{
-          backgroundColor: "#8d2e7d",
-          color: "#FFFFFF",
-          width: "100%",
-          border: "none",
-        }}
-      >
+      <Button htmlType="submit" size="large" block style={{ border: "none" }}>
         Send OTP
       </Button>
     </Form>
