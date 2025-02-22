@@ -43,12 +43,18 @@ const AboutUsEditor = () => {
         value={value}
         onChange={setValue}
         placeholder="Start writing ......"
+        style={{
+          border: "1px solid #EFE8FD",
+          marginTop: "20px",
+          borderRadius: "10px",
+        }}
       />
       <Button
         size="large"
         block
         style={{
           marginTop: "20px",
+          border: "none",
         }}
       >
         Save Changes

@@ -24,6 +24,7 @@ const PromotionContainer = () => {
               },
               Form: {
                 labelColor: "#fff",
+                labelFontSize: 26,
               },
             },
           }}

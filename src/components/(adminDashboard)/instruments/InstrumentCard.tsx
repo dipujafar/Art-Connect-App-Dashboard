@@ -1,11 +1,16 @@
 "use client";
 import { TInstrumentsData } from "@/types";
-import { Button, Image } from "antd";
+import { Button, Image, message, Popconfirm, PopconfirmProps } from "antd";
 import React, { useState } from "react";
 import EditInstrumentModal from "./EditInstrumentModal";
 
 const InstrumentCard = ({ data }: { data: TInstrumentsData }) => {
   const [openEditInstrumentModal, setOpenEditInstrumentModal] = useState(false);
+
+  const confirmBlock: PopconfirmProps["onConfirm"] = (e) => {
+    console.log(e);
+    message.success("Deleted the instrument");
+  };
 
   return (
     <>
@@ -15,15 +20,24 @@ const InstrumentCard = ({ data }: { data: TInstrumentsData }) => {
         </div>
         <h3 className="text-xl font-medium">{data?.name}</h3>
         <div className="flex  gap-x-2">
-          <Button
-            style={{
-              border: "none",
-              backgroundColor: "#FFEDE6",
-              color: "var(--color-main)",
-            }}
+          <Popconfirm
+            title="Are you sure?"
+            description=" You want to delete this instrument?"
+            onConfirm={confirmBlock}
+            okText="Yes"
+            cancelText="No"
           >
-            Delete
-          </Button>
+            <Button
+              style={{
+                border: "none",
+                backgroundColor: "#FFEDE6",
+                color: "var(--color-main)",
+              }}
+            >
+              Delete
+            </Button>
+          </Popconfirm>
+
           <Button
             style={{ border: "none" }}
             onClick={() => setOpenEditInstrumentModal(true)}

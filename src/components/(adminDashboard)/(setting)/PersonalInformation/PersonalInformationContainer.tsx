@@ -184,7 +184,12 @@ const PersonalInformationContainer = () => {
               </Form.Item>
 
               <div className={edit ? "" : "hidden"}>
-                <Button htmlType="submit" size="large" block>
+                <Button
+                  htmlType="submit"
+                  size="large"
+                  block
+                  style={{ border: "none" }}
+                >
                   Save Change
                 </Button>
               </div>

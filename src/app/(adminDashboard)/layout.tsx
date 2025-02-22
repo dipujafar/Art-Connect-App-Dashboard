@@ -29,7 +29,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
         },
       }}
     >
-      <Layout style={{ height: "100vh", overflow: "auto" }}>
+      <Layout style={{ height: "100vh", overflow: "auto" }} hasSider>
         <SidebarContainer collapsed={collapsed}></SidebarContainer>
         <Layout>
           <HeaderContainer

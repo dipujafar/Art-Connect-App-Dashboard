@@ -6,9 +6,11 @@ import Link from "next/link";
 import logo from "@/assets/logo.png";
 import { navLinks } from "@/utils/navLinks";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const SidebarContainer = ({ collapsed }: { collapsed: boolean }) => {
   const [current, setCurrent] = useState("dashboard");
+  const currentPath = usePathname();
 
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
@@ -22,15 +24,20 @@ const SidebarContainer = ({ collapsed }: { collapsed: boolean }) => {
   useEffect(() => {
     const activeKey = localStorage.getItem("activeNav");
     if (!activeKey) return;
-    setCurrent(activeKey as string);
-  }, [current, setCurrent]);
+    if (activeKey && currentPath !== "/dashboard") {
+      setCurrent(activeKey as string);
+    } else {
+      setCurrent("dashboard");
+    }
+  }, []);
+
   return (
     <Sider
       width={280}
       theme="light"
-      trigger={null}
       collapsible
       collapsed={collapsed}
+      trigger={null}
       style={{
         paddingInline: `${collapsed ? "5px" : "10px"}`,
         backgroundColor: "var(--color-secondary)",
