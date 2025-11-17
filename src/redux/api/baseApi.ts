@@ -4,7 +4,6 @@ import { logout, setUser } from "../features/authSlice";
 import { tagTypesList } from "../tagTypes";
 import { envConfig } from "@/config";
 
-
 const baseQuery = fetchBaseQuery({
   baseUrl: envConfig.baseUrl,
   prepareHeaders: (headers, { getState }) => {
@@ -15,20 +14,21 @@ const baseQuery = fetchBaseQuery({
     const token = (getState() as any).auth.token;
 
     if (token) {
-      headers.set("authorization", `${token}`);
+      headers.set("authorization", `Bearer ${token}`);
+    } else if (forgotPasswordToken) {
+      headers.set("token", forgotPasswordToken);
     }
-    if (otpToken) {
-      headers.set("token", otpToken);
-    }
-    if (resetPasswordToken) {
-      headers.set("authorization", resetPasswordToken);
-    }
-    if (forgotPasswordToken) {
-      headers.set("authorization", forgotPasswordToken);
-    }
-    if (signUpToken) {
-      headers.set("token", signUpToken);
-    }
+
+    // else if (otpToken) {
+    //   headers.set("token", otpToken);
+    // }
+    // if (resetPasswordToken) {
+    //   headers.set("authorization", resetPasswordToken);
+    // }
+
+    // if (signUpToken) {
+    //   headers.set("token", signUpToken);
+    // }
 
     return headers;
   },

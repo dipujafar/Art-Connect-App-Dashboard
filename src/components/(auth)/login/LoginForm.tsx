@@ -1,8 +1,14 @@
 "use client";
+import { useLoginMutation } from "@/redux/api/authApi";
+import { setUser } from "@/redux/features/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { Error_Modal } from "@/utils/modals";
 import type { FormProps } from "antd";
 import { Button, Checkbox, Form, Input, Flex } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "sonner";
 
 type FieldType = {
   email?: string;
@@ -10,16 +16,43 @@ type FieldType = {
   remember?: string;
 };
 
-const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+
 
 const LoginForm = () => {
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useAppDispatch();
+
   const route = useRouter();
 
-  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    console.log("Success:", values);
-    route.push("/dashboard");
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    try {
+      const formattedValues: Record<string, string> = {
+        email: values.email as string,
+        password: values.password as string,
+      };
+      const res = await login(formattedValues).unwrap();
+
+
+      // @ts-ignore
+      if (jwtDecode(res?.data?.accessToken)?.role !== "ADMIN") {
+        Error_Modal({ title: "You are not valid admin" });
+        return;
+      }
+
+      dispatch(
+        setUser({
+          user: jwtDecode(res?.data?.accessToken),
+          token: res?.data?.accessToken,
+        })
+      );
+      toast.success("Login Success", { duration: 1000 });
+      route.push("/dashboard");
+    }
+    catch (error: any) {
+      console.log(error);
+      Error_Modal({ title: error?.data?.message });
+    }
+
   };
 
   return (
@@ -27,7 +60,7 @@ const LoginForm = () => {
       name="basic"
       initialValues={{ remember: true }}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
+
       autoComplete="off"
       layout="vertical"
       style={{ width: "354px" }}
@@ -63,7 +96,7 @@ const LoginForm = () => {
         </Flex>
       </Form.Item>
 
-      <Button htmlType="submit" size="large" block style={{ border: "none " }}>
+      <Button loading={isLoading} htmlType="submit" size="large" block style={{ border: "none " }}>
         Sign In
       </Button>
     </Form>

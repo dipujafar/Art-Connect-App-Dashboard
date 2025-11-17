@@ -8,6 +8,8 @@ import profile from "@/assets/image/adminProfile.png";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Camera, Trash2, X } from "lucide-react";
+import { useGetProfileDataQuery } from "@/redux/api/profileApi";
+import PersonalInformationSkeleton from "./PersonalInformationSkeleton";
 
 const PersonalInformationContainer = () => {
   const route = useRouter();
@@ -15,6 +17,9 @@ const PersonalInformationContainer = () => {
   const [edit, setEdit] = useState(false);
   const [fileName, setFileName] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const { data, isLoading } = useGetProfileDataQuery(undefined);
+
+  console.log(data?.data)
 
   // @ts-expect-error: Ignoring TypeScript error due to inferred 'any' type for 'values' which is handled in the form submit logic
   const handleSubmit = (values) => {
@@ -71,12 +76,12 @@ const PersonalInformationContainer = () => {
       </div>
 
       {/* personal information */}
-      <div className="mt-10 flex justify-center flex-col xl:flex-row items-center  gap-10">
+      {isLoading ? <PersonalInformationSkeleton /> : <div className="mt-10 flex justify-center flex-col xl:flex-row items-center  gap-10">
         <div className="bg-[#EFE8FD] h-[365px] md:w-[350px] rounded-xl border border-[#8D2E7D] flex justify-center items-center ">
           <div className="space-y-1 relative">
             <div className="relative group">
               <Image
-                src={imageUrl || profile}
+                src={imageUrl || data?.data?.profilePicture}
                 alt="adminProfile"
                 width={1200}
                 height={1200}
@@ -139,9 +144,9 @@ const PersonalInformationContainer = () => {
                 marginTop: "25px",
               }}
               initialValues={{
-                name: "James Tracy",
-                email: "enrique@gmail.com",
-                phone: "3000597212",
+                name: data?.data?.name,
+                email: data?.data?.email,
+                phone: data?.data?.phoneNumber,
               }}
             >
               {/*  input  name */}
@@ -196,7 +201,7 @@ const PersonalInformationContainer = () => {
             </Form>
           </ConfigProvider>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

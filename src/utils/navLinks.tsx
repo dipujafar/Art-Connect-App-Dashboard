@@ -30,7 +30,7 @@ export const navLinks = [
   {
     key: "promotion",
     icon: <AudioLines size={18} />,
-  label: <Link href={"/promotion"}>Promotion</Link>,
+    label: <Link href={"/promotion"}>Promotion</Link>,
   },
 
   {
@@ -41,6 +41,6 @@ export const navLinks = [
   {
     key: "logout",
     icon: <RiLogoutCircleLine size={18} />,
-    label: <Link href={"/login"}>Logout</Link>,
+    label: <p>Logout</p>,
   },
 ];

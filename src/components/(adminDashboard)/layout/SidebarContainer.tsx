@@ -6,16 +6,24 @@ import Link from "next/link";
 import logo from "@/assets/logo.png";
 import { navLinks } from "@/utils/navLinks";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAppDispatch } from "@/redux/hooks";
+import { logout } from "@/redux/features/authSlice";
+
 
 const SidebarContainer = ({ collapsed }: { collapsed: boolean }) => {
   const [current, setCurrent] = useState("dashboard");
   const currentPath = usePathname();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
 
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
     if (e.key === "logout") {
       localStorage.removeItem("activeNav");
+      dispatch(logout());
+      router.refresh();
       return;
     }
     localStorage.setItem("activeNav", e.key);
