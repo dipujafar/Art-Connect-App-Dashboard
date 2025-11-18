@@ -4,6 +4,7 @@ export const tagTypes = {
   instruments: "Instruments",
   gigs: "Instrument",
   settings: "Settings",
+  users: "Users",
 };
 
-export const tagTypesList = [tagTypes.auth, tagTypes.profile, tagTypes.instruments, tagTypes.gigs, tagTypes.settings];
+export const tagTypesList = [tagTypes.auth, tagTypes.profile, tagTypes.instruments, tagTypes.gigs, tagTypes.settings, tagTypes.users];

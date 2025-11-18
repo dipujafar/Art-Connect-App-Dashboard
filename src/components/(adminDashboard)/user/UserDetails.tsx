@@ -6,13 +6,23 @@ import facebookIcon from "@/assets/icons/facebookIcon.png";
 import instagramIcon from "@/assets/icons/instagram.png";
 import twitterIcon from "@/assets/icons/x-icon.png";
 import Image from "next/image";
+import moment from "moment";
 
 type TPropsType = {
   open: boolean;
   setOpen: (collapsed: boolean) => void;
+  data: any
 };
 
-const UserDetails = ({ open, setOpen }: TPropsType) => {
+//  name: user?.name,
+//     email: user?.email,
+//     date: moment(user?.createdAt).format("ll"),
+//     profile: user?.profilePicture,
+//     gigs: user?._count?.gigs,
+//     phoneNumber: user?.phoneNumber,
+//     address: `${user?.city}, ${user?.country}`
+
+const UserDetails = ({ open, setOpen, data }: TPropsType) => {
   return (
     <Modal
       open={open}
@@ -40,62 +50,59 @@ const UserDetails = ({ open, setOpen }: TPropsType) => {
         <div className="mt-10">
           <div className="flex justify-between">
             <h4>User name :</h4>
-            <p className="font-medium">James Tracy</p>
+            <p className="font-medium">{data?.name}</p>
           </div>
           <Divider></Divider>
           <div className="flex justify-between">
             <h4>Total Gigs :</h4>
-            <p className="font-medium">250</p>
+            <p className="font-medium">{data?.gigs}</p>
           </div>
           <Divider></Divider>
           <div className="flex justify-between">
             <h4>Email :</h4>
-            <p className="font-medium">james1234@gmail.com</p>
+            <p className="font-medium">{data?.email}</p>
           </div>
           <Divider></Divider>
           <div className="flex justify-between">
             <h4>Phone Number :</h4>
-            <p className="font-medium">+1-800-925-6278</p>
+            <p className="font-medium">{data?.phoneNumber}</p>
           </div>
           <Divider></Divider>
           <div className="flex justify-between">
             <h4>Join Date :</h4>
-            <p className="font-medium">01-24-2024</p>
+            <p className="font-medium">{moment(data?.date).format("ll")}</p>
           </div>
 
           <Divider></Divider>
           <div className="flex justify-between">
             <h4>Address :</h4>
-            <p className="font-medium">New York,USA</p>
+            <p className="font-medium">{data?.address}</p>
           </div>
           <Divider></Divider>
           <div className="flex justify-between">
             <h4>Bio :</h4>
             <p className=" max-w-sm">
-              Marc Martinez is a multi-talented drummer and guitarist, blending
-              powerful rhythms with melodic riffs. Known for energetic
-              performances and a versatile style, Marc Martinez brings passion
-              and precision to every beat and chord.
+              {data?.bio}
             </p>
           </div>
           <Divider></Divider>
           {/* social media links */}
           <div className="flex gap-x-2 justify-center items-center   w-full mt-2 ">
-            <Link href="https://www.instagram.com" target="_blank">
+            <Link href={data?.instagramLink || "https://www.instagram.com"} target="_blank">
               <Image
                 src={instagramIcon}
                 alt="instagramIcon"
                 className="size-9"
               ></Image>
             </Link>
-            <Link href="https://www.facebook.com" target="_blank">
+            <Link href={data?.facebookLink || "https://www.facebook.com"} target="_blank">
               <Image
                 src={facebookIcon}
                 alt="facebookIcon"
                 className="size-9"
               ></Image>
             </Link>
-            <Link href="https://www.twitter.com" target="_blank">
+            <Link href={data?.twitterLink || "https://www.twitter.com"} target="_blank">
               <Image
                 src={twitterIcon}
                 alt="twitterIcon"

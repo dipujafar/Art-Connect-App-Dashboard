@@ -1,42 +1,60 @@
 "use client";
-import {
-  Image,
-  Input,
-  message,
-  Popconfirm,
-  PopconfirmProps,
-  TableProps,
-} from "antd";
+import { Image, Input, Popconfirm, TableProps } from "antd";
 import UserDetails from "./UserDetails";
 import { useState } from "react";
 import DataTable from "@/utils/DataTable";
 import { CgUnblock } from "react-icons/cg";
 import { Eye, Search } from "lucide-react";
+import { useGetAllUsersQuery } from "@/redux/api/usersApi";
+import TableSkeleton from "@/components/shared/TableSkeleton";
+import moment from "moment";
+import BlockUser from "@/components/shared/BlockUser";
 
 type TDataType = {
-  key?: number;
+  id: string;
   serial: number;
   name: string;
   email: string;
-  phone: string;
   date: string;
+  profile: string;
+  gigs: number;
+  phoneNumber: string;
+  address: string;
+  bio: string;
+  facebookLink: string;
+  twitterLink: string;
+  instagramLink: string;
+  isActive: boolean
 };
-const data: TDataType[] = Array.from({ length: 18 }).map((data, inx) => ({
-  key: inx,
-  serial: inx + 1,
-  name: "James Tracy",
-  email: "james1234@gmail.comm",
-  phone: "12345678",
-  date: "11 Oct, 2024",
-}));
 
-const confirmBlock: PopconfirmProps["onConfirm"] = (e) => {
-  console.log(e);
-  message.success("Blocked the user");
-};
+
 
 const UsersTable = () => {
   const [open, setOpen] = useState(false);
+  const { data: usersData, isLoading } = useGetAllUsersQuery({});
+  const [currentData, setCurrentData] = useState<any>(null);
+
+
+
+
+  if (isLoading) return <TableSkeleton />
+
+  const data: TDataType[] = usersData?.data?.map((user: any, inx: number) => ({
+    id: user?.id,
+    serial: inx + 1,
+    name: user?.name,
+    email: user?.email,
+    date: moment(user?.createdAt).format("ll"),
+    profile: user?.profilePicture,
+    gigs: user?._count?.gigs,
+    phoneNumber: user?.phoneNumber,
+    address: `${user?.city}, ${user?.country}`,
+    bio: user?.bio,
+    facebookLink: user?.facebookLink,
+    twitterLink: user?.twitterLink,
+    instagramLink: user?.instagramLink,
+    isActive: user?.isActive
+  }));
 
   const columns: TableProps<TDataType>["columns"] = [
     {
@@ -49,13 +67,14 @@ const UsersTable = () => {
       render: (text, record) => (
         <div className="flex items-center gap-x-1">
           <Image
-            src={"/user-profile.png"}
+            src={record?.profile}
             alt="profile-picture"
             width={40}
             height={40}
-            className="size-10"
+            className="rounded-full"
           ></Image>
           <p>{text}</p>
+          {!record?.isActive && <h4 className="ml-2 bg-red-400 px-2 rounded">Blocked</h4>}
         </div>
       ),
     },
@@ -65,8 +84,8 @@ const UsersTable = () => {
     },
 
     {
-      title: "Phone number",
-      dataIndex: "phone",
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
     },
     {
       title: "Join Date",
@@ -75,22 +94,17 @@ const UsersTable = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
+      render: (_, record) => (
         <div className="flex gap-2 ">
           <Eye
             size={22}
             color="var(--color-text-color)"
-            onClick={() => setOpen(!open)}
+            onClick={() => {
+              setOpen(!open);
+              setCurrentData(record);
+            }}
           />
-          <Popconfirm
-            title="Block the user"
-            description="Are you sure to block this user?"
-            onConfirm={confirmBlock}
-            okText="Yes"
-            cancelText="No"
-          >
-            <CgUnblock size={22} color="#CD0335" />
-          </Popconfirm>
+          <BlockUser id={record?.id} isActive={record?.isActive} />
         </div>
       ),
     },
@@ -107,7 +121,7 @@ const UsersTable = () => {
         ></Input>
       </div>
       <DataTable columns={columns} data={data} pageSize={10}></DataTable>
-      <UserDetails open={open} setOpen={setOpen}></UserDetails>
+      <UserDetails open={open} setOpen={setOpen} data={currentData}></UserDetails>
     </div>
   );
 };
