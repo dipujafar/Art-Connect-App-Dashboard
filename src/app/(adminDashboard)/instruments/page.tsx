@@ -3,9 +3,9 @@ import React from "react";
 
 const InstrumentsPage = () => {
   return (
-    <div>
+    <>
       <InstrumentsContainer></InstrumentsContainer>
-    </div>
+    </>
   );
 };
 

@@ -4,11 +4,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
-import profile from "@/assets/image/adminProfile.png";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Camera, Trash2, X } from "lucide-react";
-import { useGetProfileDataQuery } from "@/redux/api/profileApi";
+import { useGetProfileDataQuery, useUpdateProfileMutation } from "@/redux/api/profileApi";
 import PersonalInformationSkeleton from "./PersonalInformationSkeleton";
 
 const PersonalInformationContainer = () => {
@@ -18,17 +17,34 @@ const PersonalInformationContainer = () => {
   const [fileName, setFileName] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { data, isLoading } = useGetProfileDataQuery(undefined);
-
-  console.log(data?.data)
+  const [updateProfile, { isLoading: updateProfileLoading }] =
+    useUpdateProfileMutation();
 
   // @ts-expect-error: Ignoring TypeScript error due to inferred 'any' type for 'values' which is handled in the form submit logic
-  const handleSubmit = (values) => {
-    console.log("Success:", values);
-    toast.success("Successfully Change personal information", {
-      duration: 1000,
-    });
-    setEdit(false);
+  const handleSubmit = async (values) => {
+    const formattedData = {
+      name: values.name,
+      phoneNumber: values.phone,
+    };
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(formattedData));
+
+
+    if (fileName) {
+      formData.append("profilePicture", fileName);
+    }
+    try {
+      await updateProfile(formData).unwrap();
+      toast.success("Successfully Change personal information", {
+        duration: 1000,
+      });
+      setEdit(false);
+    } catch (error: any) {
+      toast.error(error?.data?.message);
+    }
+
   };
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target;
@@ -158,21 +174,18 @@ const PersonalInformationContainer = () => {
                     size="large"
                     placeholder="Enter full name "
                     readOnly
+                    style={{backgroundColor:"#e6e1f0"}}
                   ></Input>
                 )}
               </Form.Item>
 
               {/*  input  email */}
               <Form.Item label="Email" name="email">
-                {edit ? (
-                  <Input size="large" placeholder="Enter email "></Input>
-                ) : (
-                  <Input
-                    size="large"
-                    placeholder="Enter email"
-                    readOnly
-                  ></Input>
-                )}
+                <Input
+                  size="large"
+                  placeholder="Enter email"
+                  readOnly
+                ></Input>
               </Form.Item>
 
               {/* input  phone number  */}
@@ -190,6 +203,7 @@ const PersonalInformationContainer = () => {
 
               <div className={edit ? "" : "hidden"}>
                 <Button
+                  loading={updateProfileLoading}
                   htmlType="submit"
                   size="large"
                   block

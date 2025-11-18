@@ -1,20 +1,28 @@
 "use client";
 
+import { useGetSettingsQuery, useUpdateSettingsMutation } from "@/redux/api/settingsApi";
+import { Error_Modal } from "@/utils/modals";
 import { Button } from "antd";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import "react-quill/dist/quill.snow.css";
+import { toast } from "sonner";
+import ContentSkeleton from "../skeleton/ContentSkeleton";
 
 // Dynamically import ReactQuill with SSR disabled
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const AboutUsEditor = () => {
   const route = useRouter();
-  const [value, setValue] = useState(
-    "<h2>Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. Egestas duis id nisl sed ante congue scelerisque. Eleifend facilisis aliquet tempus morbi leo sagittis. Pellentesque odio amet turpis habitant. Imperdiet tincidunt nisl consectetur hendrerit accumsan vehicula imperdiet mattis. Neque a vitae diam pharetra duis habitasse convallis luctus pulvinar. Pharetra nunc morbi elementum nisl magnis convallis arcu enim tortor.</h2><p><br/></p><h2>In today’s rapidly evolving world, the importance of education cannot be overstated. Technological advancements, global interconnectivity, and the proliferation of information demand that we continuously adapt and expand our understanding. An educated individual is better prepared to tackle these challenges, innovate, and drive progress. Moreover, education promotes equality and social justice, providing marginalized groups with the means to uplift themselves and break cycles of poverty.</h2><p><br/></p><h2>Education also nurtures empathy and cultural awareness, fostering a more inclusive and understanding society. By learning about diverse perspectives and histories, we become more open-minded and respectful of differences, which is crucial in a world that is increasingly interconnected. This cultural competence not only enhances personal relationships but also strengthens international collaboration and peace.....</h2>"
-  );
+  const { data, isLoading } = useGetSettingsQuery(undefined);
+  const [value, setValue] = useState(data?.data?.about);
+  const [updateSetting, { isLoading: isUpdating }] = useUpdateSettingsMutation();
+
+  useEffect(() => {
+    setValue(data?.data?.about);
+  }, [data]);
 
   const toolbarOptions = [
     ["image"],
@@ -28,6 +36,19 @@ const AboutUsEditor = () => {
   const moduleConest = {
     toolbar: toolbarOptions,
   };
+
+  const handleUpdateContent = async () => {
+    try {
+      await updateSetting({ about: value }).unwrap();
+      toast.success("Successfully updated content", { duration: 1000 });
+    }
+    catch (error: any) {
+      Error_Modal({ title: error?.data?.message });
+    }
+
+  }
+
+  if (isLoading) return <ContentSkeleton />
 
   return (
     <>
@@ -56,6 +77,8 @@ const AboutUsEditor = () => {
           marginTop: "20px",
           border: "none",
         }}
+        loading={isUpdating}
+        onClick={handleUpdateContent}
       >
         Save Changes
       </Button>

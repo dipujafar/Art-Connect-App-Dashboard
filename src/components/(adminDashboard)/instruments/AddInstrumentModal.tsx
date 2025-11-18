@@ -1,6 +1,9 @@
 import { Button, Form, Input, Modal, Upload } from "antd";
 import { RiCloseLargeLine } from "react-icons/ri";
 import { UploadOutlined } from "@ant-design/icons";
+import { useCreateInstrumentMutation } from "@/redux/api/instrumentsApi";
+import { Error_Modal } from "@/utils/modals";
+import { toast } from "sonner";
 
 type TPropsType = {
   open: boolean;
@@ -9,11 +12,31 @@ type TPropsType = {
 
 const AddInstrumentModal = ({ open, setOpen }: TPropsType) => {
   const [form] = Form.useForm();
+  const [createInstrument, { isLoading }] = useCreateInstrumentMutation();
 
   // @ts-expect-error: Ignoring TypeScript error due to inferred 'any' type for 'values' which is handled in the form submit logic
-  const handleSubmit = (values) => {
-    console.log("Success:", values);
-    setOpen(false);
+  const handleSubmit = async (values) => {
+    const formattedData = { name: values?.instrumentName };
+    const formData = new FormData();
+
+    console.log(values?.instrumentImage);
+    // return;
+
+    formData.append("data", JSON.stringify(formattedData));
+    formData.append("icon", values?.instrumentImage?.file?.originFileObj);
+
+    try {
+      await createInstrument(formData).unwrap();
+      toast.success("Successfully add an new instrument", { duration: 1000 });
+      form.resetFields();
+      setOpen(false);
+    }
+    catch (error: any) {
+      Error_Modal({ title: error?.data?.message });
+    }
+
+
+
   };
   return (
     <>
@@ -71,7 +94,7 @@ const AddInstrumentModal = ({ open, setOpen }: TPropsType) => {
               label="Upload instrument image"
               name="instrumentImage"
               rules={[
-                { required: true, message: "Please Enter instrument name" },
+                { required: true, message: "Please Enter instrument icon" },
               ]}
             >
               <Upload className="flex justify-center">
@@ -87,7 +110,7 @@ const AddInstrumentModal = ({ open, setOpen }: TPropsType) => {
               </Upload>
             </Form.Item>
 
-            <Button htmlType="submit" size="large" block>
+            <Button loading={isLoading} htmlType="submit" size="large" block>
               Add Instrument
             </Button>
           </Form>

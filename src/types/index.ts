@@ -1,4 +1,6 @@
-export type TInstrumentsData = {
-  name: string;
-  image: string;
-};
+export type TInstrument = {
+  id: string;
+  name: string,
+  icon: string,
+}
+

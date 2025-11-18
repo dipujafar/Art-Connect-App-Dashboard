@@ -1,20 +1,48 @@
-import { Button, Form, Input, Modal, Upload } from "antd";
+import { Button, Form, Input, Modal, Upload, UploadFile } from "antd";
 import { RiCloseLargeLine } from "react-icons/ri";
 import { UploadOutlined } from "@ant-design/icons";
+import { useUpdateInstrumentMutation } from "@/redux/api/instrumentsApi";
+import { Error_Modal } from "@/utils/modals";
+import { TInstrument } from "@/types";
+import { useEffect } from "react";
+import { UploadFileStatus } from "antd/es/upload/interface";
+import { toast } from "sonner";
 
 type TPropsType = {
+  id: string;
   open: boolean;
   setOpen: (collapsed: boolean) => void;
+  data: TInstrument;
 };
 
-const EditInstrumentModal = ({ open, setOpen }: TPropsType) => {
+const EditInstrumentModal = ({ open, setOpen, id, data }: TPropsType) => {
+  const [updateInstrument, { isLoading }] = useUpdateInstrumentMutation();
   const [form] = Form.useForm();
 
+
+
   // @ts-expect-error: Ignoring TypeScript error due to inferred 'any' type for 'values' which is handled in the form submit logic
-  const handleSubmit = (values) => {
-    console.log("Success:", values);
-    setOpen(false);
+  const handleSubmit = async (values) => {
+    const formattedData = { name: values?.instrumentName };
+    const formData = new FormData();
+    
+    formData.append("data", JSON.stringify(formattedData));
+    formData.append("icon", values?.instrumentImage?.file?.originFileObj);
+
+    try {
+      await updateInstrument({ id, data: formData }).unwrap();
+      toast.success("Successfully update an new instrument", { duration: 1000 });
+      form.resetFields();
+      setOpen(false);
+    }
+    catch (error: any) {
+      Error_Modal({ title: error?.data?.message });
+    }
   };
+
+
+
+
   return (
     <>
       <Modal
@@ -52,6 +80,7 @@ const EditInstrumentModal = ({ open, setOpen }: TPropsType) => {
               maxWidth: 500,
               marginTop: "25px",
             }}
+            initialValues={{ instrumentName: data?.name }}
           >
             {/*  input instrument name */}
             <Form.Item
@@ -64,17 +93,15 @@ const EditInstrumentModal = ({ open, setOpen }: TPropsType) => {
               <Input
                 size="large"
                 placeholder="Enter instrument name "
-                defaultValue={"ELECTRIC GUITAR"}
+                defaultValue={data?.name}
               />
             </Form.Item>
 
             {/*  input instrument name */}
             <Form.Item
-              label="Upload instrument image"
+              label="Upload New image"
               name="instrumentImage"
-              rules={[
-                { required: true, message: "Please Enter instrument name" },
-              ]}
+
             >
               <Upload className="flex justify-center">
                 <Button
@@ -89,7 +116,7 @@ const EditInstrumentModal = ({ open, setOpen }: TPropsType) => {
               </Upload>
             </Form.Item>
 
-            <Button htmlType="submit" size="large" block>
+            <Button loading={isLoading} htmlType="submit" size="large" block>
               Add Instrument
             </Button>
           </Form>

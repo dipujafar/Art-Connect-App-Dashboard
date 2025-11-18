@@ -5,6 +5,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import avatarImg from "@/assets/image/profile.png";
 
 import Link from "next/link";
+import { useAppSelector } from "@/redux/hooks";
 
 type TNavbarProps = {
   collapsed: boolean;
@@ -12,6 +13,10 @@ type TNavbarProps = {
 };
 
 const Navbar = ({ collapsed, setCollapsed }: TNavbarProps) => {
+  const {user} = useAppSelector((state) => state.auth);
+
+  
+
   return (
     <div className="flex items-center justify-between w-[97%] font-poppins">
       {/* Header left side */}
@@ -54,7 +59,8 @@ const Navbar = ({ collapsed, setCollapsed }: TNavbarProps) => {
 
         <Link href={"/personalInformation"} className="flex items-center">
           <div className="flex text-black items-center gap-x-1 bg-text-color px-2 rounded-full py-[2px]">
-            <p className="text-lg ">James Tracy</p>
+           {/* @ts-ignore */}
+            <p className="text-lg ">{user?.name}</p>
             <Avatar src={avatarImg.src} size={40}></Avatar>
           </div>
         </Link>

@@ -16,7 +16,7 @@ const verifyEmail = () => {
         <div>
           <div className="mb-6  flex flex-col justify-center items-center gap-y-4">
             <div>
-              <Image src={logo} alt="logImage"></Image>
+              <Image src={logo} alt="logImage" className="w-40"></Image>
             </div>
             <div className="text-center space-y-4 mb-4">
               <div className="text-2xl  font-bold  text-center ">

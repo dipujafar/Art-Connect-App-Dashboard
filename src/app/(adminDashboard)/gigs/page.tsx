@@ -3,9 +3,9 @@ import React from "react";
 
 const GigsPage = () => {
   return (
-    <div>
+    <>
       <GigsContainer></GigsContainer>
-    </div>
+    </>
   );
 };
 

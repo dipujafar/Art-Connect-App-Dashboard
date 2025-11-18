@@ -2,7 +2,7 @@ import Image from "next/image";
 import userImage from "@/assets/image/usersImage.png";
 import statisticImage from "@/assets/image/statisticImage.png";
 
-const GigsStatistic = () => {
+const GigsStatistic = ({totalGigs}:{totalGigs:number}) => {
   return (
     <div className="h-32 flex flex-col lg:flex-row gap-y-2  font-roboto text-primary-white">
       <div className="lg:w-1/2 h-full lg:mr-4 bg-section-bg rounded-xl flex gap-x-4 px-12 items-center ">
@@ -15,7 +15,7 @@ const GigsStatistic = () => {
             Total Gigs
           </p>
           <h4 className="xl:text-3xl text-xl font-bold text-main-color">
-            2,529
+            {totalGigs}
           </h4>
         </div>
       </div>
