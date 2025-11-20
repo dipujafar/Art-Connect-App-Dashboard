@@ -2,7 +2,7 @@ import { RiDashboardHorizontalFill } from "react-icons/ri";
 import { GoPeople } from "react-icons/go";
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiLogoutCircleLine } from "react-icons/ri";
-import { AudioLines, GalleryVertical, KeyboardMusic } from "lucide-react";
+import { AudioLines, GalleryVertical, KeyboardMusic, Music } from "lucide-react";
 import Link from "next/link";
 
 export const navLinks = [
@@ -23,10 +23,16 @@ export const navLinks = [
     label: <Link href={"/instruments"}>Instruments</Link>,
   },
   {
+    key: "music-type",
+    icon: <Music  size={18} />,
+    label: <Link href={"/music-type"}>Music Type</Link>,
+  },
+  {
     key: "gigs",
     icon: <GalleryVertical size={18} />,
     label: <Link href={"/gigs"}>Gigs</Link>,
   },
+
   {
     key: "promotion",
     icon: <AudioLines size={18} />,

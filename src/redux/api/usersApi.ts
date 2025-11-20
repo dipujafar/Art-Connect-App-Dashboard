@@ -4,9 +4,10 @@ import { baseApi } from "./baseApi";
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllUsers: builder.query({
-      query: () => ({
+      query: (queries) => ({
         url: "/user/users",
         method: "GET",
+        params: queries,
       }),
       providesTags: [tagTypes.users],
     }),

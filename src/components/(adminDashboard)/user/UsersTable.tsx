@@ -1,14 +1,15 @@
-"use client";
-import { Image, Input, Popconfirm, TableProps } from "antd";
+"use client";;
+import { Image, Input, TableProps } from "antd";
 import UserDetails from "./UserDetails";
 import { useState } from "react";
 import DataTable from "@/utils/DataTable";
-import { CgUnblock } from "react-icons/cg";
 import { Eye, Search } from "lucide-react";
 import { useGetAllUsersQuery } from "@/redux/api/usersApi";
 import TableSkeleton from "@/components/shared/TableSkeleton";
 import moment from "moment";
 import BlockUser from "@/components/shared/BlockUser";
+import { useSearchParams } from "next/navigation";
+import { useDebounce } from "use-debounce";
 
 type TDataType = {
   id: string;
@@ -31,17 +32,26 @@ type TDataType = {
 
 const UsersTable = () => {
   const [open, setOpen] = useState(false);
-  const { data: usersData, isLoading } = useGetAllUsersQuery({});
   const [currentData, setCurrentData] = useState<any>(null);
-
-
+  const page = useSearchParams().get("page") || "1";
+  const limit = useSearchParams().get("limit") || "10";
+  const [searchText, setSearchText] = useState("");
+  const [searchValue] = useDebounce(searchText, 500);
+  const queries: Record<string, string> = {};
+  if (page) queries.page = page;
+  if (limit) queries.limit = limit;
+  if (searchValue) queries.searchTerm = searchValue;
+  const { data: usersData, isLoading } = useGetAllUsersQuery(queries);
 
 
   if (isLoading) return <TableSkeleton />
 
   const data: TDataType[] = usersData?.data?.map((user: any, inx: number) => ({
     id: user?.id,
-    serial: inx + 1,
+    serial: `# ${Number(page) === 1
+        ? inx + 1
+        : (Number(page) - 1) * Number(limit) + inx + 1
+      }`,
     name: user?.name,
     email: user?.email,
     date: moment(user?.createdAt).format("ll"),
@@ -65,7 +75,7 @@ const UsersTable = () => {
       title: "User Name",
       dataIndex: "name",
       render: (text, record) => (
-        <div className="flex items-center gap-x-1">
+        <div className="flex items-center gap-x-2">
           <Image
             src={record?.profile}
             alt="profile-picture"
@@ -118,9 +128,11 @@ const UsersTable = () => {
           style={{ width: "220px", borderRadius: "20px" }}
           placeholder="Search Users..."
           prefix={<Search size={20} color="#959697"></Search>}
+          onChange={(e) => setSearchText(e.target.value)}
         ></Input>
       </div>
-      <DataTable columns={columns} data={data} pageSize={10}></DataTable>
+      <DataTable columns={columns} data={data} pageSize={Number(limit)}
+        total={usersData?.meta?.total}></DataTable>
       <UserDetails open={open} setOpen={setOpen} data={currentData}></UserDetails>
     </div>
   );

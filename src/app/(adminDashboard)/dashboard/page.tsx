@@ -1,6 +1,6 @@
 import LatestUser from "@/components/(adminDashboard)/dashboard/LatestUser";
-import Statistic from "@/components/(adminDashboard)/dashboard/Statistic";
-import UserOverviewChart from "@/components/(adminDashboard)/dashboard/UserOverviewChart";
+import Statistic from "@/components/(adminDashboard)/dashboard/Statistic/Statistic";
+import UserOverviewChart from "@/components/(adminDashboard)/dashboard/UserOverviewChart/UserOverviewChart";
 
 const DashboardPage = () => {
   return (

@@ -6,6 +6,7 @@ import avatarImg from "@/assets/image/profile.png";
 
 import Link from "next/link";
 import { useAppSelector } from "@/redux/hooks";
+import { useGetProfileDataQuery } from "@/redux/api/profileApi";
 
 type TNavbarProps = {
   collapsed: boolean;
@@ -13,9 +14,12 @@ type TNavbarProps = {
 };
 
 const Navbar = ({ collapsed, setCollapsed }: TNavbarProps) => {
-  const {user} = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
+  const { data: profileData } = useGetProfileDataQuery({}, {
+    skip: !user
+  })
 
-  
+
 
   return (
     <div className="flex items-center justify-between w-[97%] font-poppins">
@@ -29,7 +33,8 @@ const Navbar = ({ collapsed, setCollapsed }: TNavbarProps) => {
         </button>
         <div className="flex flex-col ">
           <h2 className="text-2xl  font-medium">
-            Welcome, James
+            {/* @ts-ignore */}
+            Welcome, {profileData?.data?.name?.split(" ")?.[1] || profileData?.name}
             <span className="block  text-sm font-normal">Have a nice day!</span>
           </h2>
         </div>
@@ -59,8 +64,8 @@ const Navbar = ({ collapsed, setCollapsed }: TNavbarProps) => {
 
         <Link href={"/personalInformation"} className="flex items-center">
           <div className="flex text-black items-center gap-x-1 bg-text-color px-2 rounded-full py-[2px]">
-           {/* @ts-ignore */}
-            <p className="text-lg ">{user?.name}</p>
+            {/* @ts-ignore */}
+            <p className="text-lg ">{profileData?.data?.name}</p>
             <Avatar src={avatarImg.src} size={40}></Avatar>
           </div>
         </Link>

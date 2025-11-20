@@ -1,15 +1,30 @@
 "use client";
 import Container from "@/components/shared/Container";
-import { Button, ConfigProvider, Form, Input } from "antd";
+import { useCreatePromotionMutation } from "@/redux/api/promotionApi";
+import { Error_Modal } from "@/utils/modals";
+import { Button, ConfigProvider, Form, Input, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React from "react";
 import { toast } from "sonner";
 
 const PromotionContainer = () => {
   const [form] = Form.useForm();
+  const [sendPromotion, { isLoading }] = useCreatePromotionMutation();
   // @ts-expect-error: Ignoring TypeScript error due to inferred 'any' type for 'values' which is handled in the form submit logic
-  const handleSubmit = (values) => {
-    console.log("Success:", values);
+  const handleSubmit = async (values) => {
+    try {
+      const formattedData = {
+        subject: values?.subject,
+        message: values?.description,
+      }
+
+      await sendPromotion(formattedData).unwrap();
+      toast.success("Successfully send promotion", { duration: 1000 });
+      form.resetFields();
+    }
+    catch (error: any) {
+      Error_Modal({ title: error?.data?.message });
+    }
   };
 
   return (
@@ -57,6 +72,7 @@ const PromotionContainer = () => {
                 size="large"
                 block
                 style={{ border: "none" }}
+                loading={isLoading}
               >
                 Save Change
               </Button>

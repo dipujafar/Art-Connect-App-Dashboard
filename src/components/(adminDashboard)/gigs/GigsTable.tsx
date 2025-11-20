@@ -1,9 +1,10 @@
-"use client";
-import { Image, message, PopconfirmProps, TableProps } from "antd";
+"use client";;
+import { TableProps } from "antd";
 import { useState } from "react";
 import DataTable from "@/utils/DataTable";
-import { ArrowDownWideNarrowIcon, Eye, Search } from "lucide-react";
+import { ArrowDownWideNarrowIcon, Eye } from "lucide-react";
 import GigsDetailsModal from "./GigsDetailsModal";
+import moment from "moment";
 
 type TDataType = {
   key?: number;
@@ -13,103 +14,57 @@ type TDataType = {
   phone: string;
   date: string;
   address: string;
+  title: string;
   status: "Completed" | "On Going";
 };
-const data: TDataType[] = Array.from({ length: 18 }).map((data, inx) => ({
-  key: inx,
-  serial: inx + 1,
-  name: "James Tracy",
-  email: "james1234@gmail.comm",
-  phone: "12345678",
-  date: "11 Oct, 2024",
-  address: "New York, USA",
-  status: inx % 2 === 0 ? "Completed" : "On Going",
-}));
 
-const GigsTable = () => {
+
+const GigsTable = ({ data, limit, page }: any) => {
   const [open, setOpen] = useState(false);
+  const [currentData, setCurrentData] = useState<any>(null);
+
 
   const columns: TableProps<TDataType>["columns"] = [
     {
       title: "#SL",
-      dataIndex: "serial",
+      render: (text, record, index) =>
+        (Number(page) - 1) * Number(limit) + (index + 1),
     },
     {
-      title: "Name",
-      dataIndex: "name",
-      render: (text) => (
-        <div className="flex items-center gap-x-1">
-          <Image
-            src={"/user-profile.png"}
-            alt="profile-picture"
-            width={40}
-            height={40}
-            className="size-10"
-          ></Image>
-          <p>{text}</p>
-        </div>
-      ),
+      title: "Title",
+      dataIndex: "title",
     },
     {
-      title: "Email",
-      dataIndex: "email",
+      title: "Stage Type",
+      dataIndex: "stageType",
     },
-
     {
-      title: "Phone number",
-      dataIndex: "phone",
+      title: "Type",
+      dataIndex: "type",
     },
-
     {
-      title: "Address",
-      dataIndex: "address",
+      title: "Privacy",
+      dataIndex: "privacy",
     },
     {
       title: "Date",
       dataIndex: "date",
+      render: (text) => <p>{moment(text).format("ll")}</p>,
     },
     {
       title: "Status",
       dataIndex: "status",
-      render: (text) =>
-        text == "Completed" ? (
-          <span className="py-1 px-2  rounded-full bg-green-200 text-green-800">
-            Completed
-          </span>
-        ) : (
-          <span className="py-1 px-2  rounded-full bg-red-200 text-red-800">
-            On Going
-          </span>
-        ),
-
-      filters: [
-        {
-          text: "Completed",
-          value: "Completed",
-        },
-        {
-          text: "On Going",
-          value: "On Going",
-        },
-      ],
-      filterIcon: (value) => (
-        <ArrowDownWideNarrowIcon
-          size={20}
-          color="#fff"
-          className="flex justify-start items-start"
-        />
-      ),
-      onFilter: (value, record) => record.status.indexOf(value as string) === 0,
+      render: (text) => <p>{text?.split("_").join(" ")}</p>,
     },
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
+      render: (_, record) => (
         <div className="flex gap-2 ">
           <Eye
             size={22}
             color="var(--color-text-color)"
-            onClick={() => setOpen(!open)}
+            onClick={() => { setOpen(!open); setCurrentData(record); }}
           />
         </div>
       ),
@@ -118,8 +73,9 @@ const GigsTable = () => {
 
   return (
     <div className="bg-section-bg rounded-md">
-      <DataTable columns={columns} data={data} pageSize={10}></DataTable>
-      <GigsDetailsModal open={open} setOpen={setOpen}></GigsDetailsModal>
+      <DataTable columns={columns} data={data?.data} pageSize={Number(limit)}
+        total={data?.meta?.total} ></DataTable>
+      <GigsDetailsModal open={open} setOpen={setOpen} gig={currentData}></GigsDetailsModal>
     </div>
   );
 };

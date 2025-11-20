@@ -1,6 +1,7 @@
 "use client";
+import { useUserChartDataQuery } from "@/redux/api/metaDataApi";
 import { Select } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -10,26 +11,37 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import UserOverviewChartSkeleton from "./UserOverviewChartSkeleton";
 
-const data = [
-  { name: "Jan", user: 1200 },
-  { name: "Feb", user: 1402 },
-  { name: "Mar", user: 1525 },
-  { name: "Apr", user: 1222 },
-  { name: "May", user: 1553 },
-  { name: "Jun", user: 1634 },
-  { name: "Jul", user: 1923 },
-  { name: "Aug", user: 1324 },
-  { name: "Sep", user: 1834 },
-  { name: "Oct", user: 1256 },
-  { name: "Nov", user: 1634 },
-  { name: "Dec", user: 2105 },
-];
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+type TUserData = {
+  month: string;
+  count: number;
+};
 
 const UserOverviewChart = () => {
   const [selectedYear, setSelectedYear] = useState<string>(
     new Date().getFullYear().toString()
   );
+  const [chartData, setChartData] = useState<TUserData[]>([]);
+  const { data: userChartData, isLoading } = useUserChartDataQuery({ year: selectedYear });
+
+
+
+  useEffect(() => {
+    userChartData?.data?.forEach((data: any, index: number) => {
+      const formattedData = { month: months[index], count: data?.count };
+      setChartData((prevData) => [...prevData, formattedData]);
+    });
+  }, [userChartData, selectedYear]);
+
+
+
+  if (isLoading) return <UserOverviewChartSkeleton />;
+
+
+
 
   const handleChange = (value: string) => {
     console.log(`selected ${value}`);
@@ -56,7 +68,7 @@ const UserOverviewChart = () => {
       </div>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
-          data={data}
+          data={chartData}
           margin={{
             top: 0,
             right: 0,
@@ -66,7 +78,7 @@ const UserOverviewChart = () => {
           barSize={20}
         >
           <XAxis
-            dataKey="name"
+            dataKey="month"
             scale="point"
             padding={{ left: 10, right: 10 }}
             tickMargin={10}
@@ -92,7 +104,7 @@ const UserOverviewChart = () => {
             barSize={35}
             radius={[2, 2, 0, 0]}
             background={false}
-            dataKey="user"
+            dataKey="count"
             fill="var(--color-main)"
             stroke="var(--color-main)"
           />
